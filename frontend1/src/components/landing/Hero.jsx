@@ -37,9 +37,6 @@ export default function Hero() {
             Get Started Free
             <ArrowRight className="w-5 h-5" />
           </Link>
-          <button className="px-8 py-4 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg text-lg font-semibold transition">
-            Watch Demo
-          </button>
         </div>
 
         {/* Floating Style Cards */}

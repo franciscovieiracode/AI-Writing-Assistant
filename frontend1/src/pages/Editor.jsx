@@ -14,10 +14,10 @@ export default function Editor() {
     if (!inputText.trim()) return;
     
     setLoading(true);
-    
+
     try {
-      // TODO: Replace with actual API call to your Python LLM service
-      const response = await fetch('/api/text/rewrite', {
+      // Call Python LLM microservice
+      const response = await fetch('http://localhost:5000/api/rewrite', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -27,12 +27,20 @@ export default function Editor() {
           style: selectedStyle
         })
       });
-      
+
+      if (!response.ok) {
+        throw new Error(`Server error: ${response.status}`);
+      }
+
       const data = await response.json();
-      setOutputText(data.rewrittenText);
+      if (data.success) {
+        setOutputText(data.rewrittenText);
+      } else {
+        setOutputText(`[${selectedStyle.toUpperCase()} STYLE]\n\n${inputText}`);
+        console.error('LLM error:', data.details);
+      }
     } catch (error) {
       console.error('Error rewriting text:', error);
-      // Fallback for demo purposes
       setOutputText(`[${selectedStyle.toUpperCase()} STYLE]\n\n${inputText}`);
     } finally {
       setLoading(false);
